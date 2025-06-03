@@ -6,9 +6,7 @@ info() {
 # Install pixi
 info "Installing pixi..."
 curl -fsSL https://pixi.sh/install.sh | bash || error_exit "Failed to install pixi."
-if ! grep -q 'eval "$(pixi completion --shell bash)"' "$BASHRC"; then
-  echo 'eval "$(pixi completion --shell bash)"' >>"$BASHRC"
-fi
+info "Sourcing bashrc..."
 source ~/.bashrc
 
 info "Updating pixi..."
@@ -23,12 +21,7 @@ info "Installing git..."
 pixi global install git || error_exit "Failed to install git."
 
 info "Authenticating gcloud..."
-if gcloud auth list --filter=status:ACTIVE --format="get(account)" 2>/dev/null | grep -q .; then
-  info "gcloud is already authenticated."
-else
-  info "Authenticating gcloud..."
-  gcloud auth login --update-adc --force || error_exit "Failed to authenticate gcloud."
-fi
+gcloud auth login --update-adc --force
 
 
 info "Checking git configuration..."
