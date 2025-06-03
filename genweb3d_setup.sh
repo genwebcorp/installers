@@ -3,6 +3,15 @@
 info() {
   echo -e "\033[1;34m[INFO]\033[0m $1"
 }
+
+if hash conda 2>/dev/null; then
+  conda init >/dev/null 2>&1
+  conda deactivate >/dev/null 2>&1
+  conda config --set auto_activate_base false
+fi
+
+
+
 # Install pixi
 info "Installing pixi..."
 curl -fsSL https://pixi.sh/install.sh | bash || error_exit "Failed to install pixi."
@@ -24,25 +33,31 @@ info "Authenticating gcloud..."
 gcloud auth login --update-adc --force
 
 
-info "Checking git configuration..."
-if git config --global user.name &>/dev/null; then
-  GIT_USER_NAME=$(git config --global user.name)
-  info "git username already configured: $GIT_USER_NAME"
-else
-  read -p "Enter your git username: " GIT_USER_NAME
-  git config --global user.name "$GIT_USER_NAME" || error_exit "Failed to set git username."
-  info "git username configured: $GIT_USER_NAME"
-fi
+echo "=== Git Identity Setup ==="
 
+# Prompt for name
+read -rp "Enter your Git user name: " NAME
 
-if git config --global user.email &>/dev/null; then
-  GIT_USER_EMAIL=$(git config --global user.email)
-  info "git email already configured: $GIT_USER_EMAIL"
-else
-  read -p "Enter your git email: " GIT_USER_EMAIL
-  git config --global user.email "$GIT_USER_EMAIL" || error_exit "Failed to set git email."
-  info "git email configured: $GIT_USER_EMAIL"
-fi
+# Prompt for email
+read -rp "Enter your Git email address: " EMAIL
+
+# Prompt for scope
+while true; do
+  read -rp "Apply settings globally? (y/n): " SCOPE
+  case "$SCOPE" in
+    [Yy]* )
+      git config --global user.name "$NAME"
+      git config --global user.email "$EMAIL"
+      echo "✅ Set Git global name and email."
+      break;;
+    [Nn]* )
+      git config user.name "$NAME"
+      git config user.email "$EMAIL"
+      echo "✅ Set Git local name and email (for this repo only)."
+      break;;
+    * ) echo "Please answer y (yes) or n (no).";;
+  esac
+done
 
 
 info "Installing lazygit..."
@@ -64,5 +79,3 @@ pixi install || error_exit "Failed to install pixi environment."
 info "Pulling bucket..."
 pixi run pull || error_exit "Failed to pull bucket."
 
-info "Running tests..."
-pixi run test || error_exit "Failed to run tests."
