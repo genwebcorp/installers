@@ -24,7 +24,7 @@ pixi global update || error_exit "Failed to update pixi."
 # Install GitHub CLI
 info "Installing GitHub CLI..."
 pixi global install gh || error_exit "Failed to install GitHub CLI."
-gh auth login --web || error_exit "Failed to authenticate GitHub CLI."
+gh auth login -p https --web || error_exit "Failed to authenticate GitHub CLI."
 
 info "Installing git..."
 pixi global install git || error_exit "Failed to install git."
