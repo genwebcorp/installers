@@ -8,6 +8,7 @@ curl -fsSL https://pixi.sh/install.sh | bash || error_exit "Failed to install pi
 if ! grep -q 'eval "$(pixi completion --shell bash)"' "$BASHRC"; then
   echo 'eval "$(pixi completion --shell bash)"' >>"$BASHRC"
 fi
+source ~/.bashrc
 
 info "Updating pixi..."
 pixi global update || error_exit "Failed to update pixi."
