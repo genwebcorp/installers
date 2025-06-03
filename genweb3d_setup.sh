@@ -55,13 +55,14 @@ pixi global install lazygit || error_exit "Failed to install lazygit."
 
 info "Installing pre-commit..."
 pixi global install pre-commit || error_exit "Failed to install pre-commit."
-info "Setting up pre-commit hooks..."
-pre-commit install || error_exit "Failed to install pre-commit hooks."
 
 
 info "Cloning genweb3d..."
 git clone https://github.com/nishad-genweb/genweb3d.git
 cd genweb3d
+
+info "Setting up pre-commit hooks..."
+pre-commit install || error_exit "Failed to install pre-commit hooks."
 
 info "Installing pixi environment..."
 pixi install || error_exit "Failed to install pixi environment."
