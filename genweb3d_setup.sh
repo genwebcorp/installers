@@ -67,7 +67,7 @@ info "Installing pre-commit..."
 pixi global install pre-commit || error_exit "Failed to install pre-commit."
 
 info "Cloning genweb3d..."
-git clone https://github.com/nishad-genweb/genweb3d.git
+git clone https://github.com/genwebcorp/genweb3d.git
 cd genweb3d
 
 info "Setting up pre-commit hooks..."
