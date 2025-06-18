@@ -47,10 +47,10 @@ echo "  Request access here: https://huggingface.co/meta-llama/Meta-Llama-3.1-8B
 echo -n "Press Enter to continue after you have requested and been granted access..."
 read
 
-# 2. Create the systemd service file
+# 4. Create the systemd service file
 SERVICE_FILE="/etc/systemd/system/genlm-server.service"
 USER_NAME=$(whoami)
-WORKING_DIR="$HOME/genweb3d"
+WORKING_DIR="$GENWEB3D_DIR"
 
 # Collect all arguments passed to this script (for server options)
 SERVER_ARGS="$*"
@@ -75,7 +75,7 @@ Environment=PYTHONUNBUFFERED=1
 WantedBy=multi-user.target
 EOF
 
-# 3. Reload systemd, enable, and start the service
+# 5. Reload systemd, enable, and start the service
 info "Reloading systemd daemon..."
 sudo systemctl daemon-reload
 
