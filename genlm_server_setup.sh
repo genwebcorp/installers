@@ -28,17 +28,16 @@ if pixi run python -c "import genweb3d" 2>/dev/null; then
 else
   error_exit "genweb3d is not installed or not importable. Please install the repository and ensure 'genweb3d' is available before running this script."
 fi
-cd "$ORIG_DIR"
 
 # 2. Check if user is logged in to Hugging Face CLI; if not, prompt for token and log in
-if huggingface-cli whoami &>/dev/null; then
-  info "Already logged in to Hugging Face CLI."
-else
-  echo -n "Enter your Hugging Face access token: "
+if pixi run huggingface-cli whoami 2>/dev/null | grep -q "Not logged in"; then
+  echo -n "Enter your Hugging Face access token (it will be invisible): "
   read -s HF_TOKEN
   echo
-  echo "$HF_TOKEN" | huggingface-cli login --token
+  pixi run huggingface-cli login --token "$HF_TOKEN"
   info "Logged in to Hugging Face CLI."
+else
+  info "Already logged in to Hugging Face CLI."
 fi
 
 # 3. Prompt user to ensure they have requested access to Llama 3.1 8B
@@ -46,6 +45,8 @@ info "Please make sure you have requested access to the Llama 3.1 8B model on Hu
 echo "  Request access here: https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct"
 echo -n "Press Enter to continue after you have requested and been granted access..."
 read
+
+cd "$ORIG_DIR"
 
 # 4. Create the systemd service file
 SERVICE_FILE="/etc/systemd/system/genlm-server.service"
