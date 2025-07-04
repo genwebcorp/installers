@@ -66,9 +66,9 @@ pixi global install lazygit || error_exit "Failed to install lazygit."
 info "Installing pre-commit..."
 pixi global install pre-commit || error_exit "Failed to install pre-commit."
 
-info "Cloning rnd..."
-git clone https://github.com/genwebcorp/rnd.git
-cd rnd
+info "Cloning genweb..."
+git clone https://github.com/genwebcorp/genweb.git
+cd genweb
 
 info "Setting up pre-commit hooks..."
 pre-commit install || error_exit "Failed to install pre-commit hooks."
